@@ -51,26 +51,24 @@ const stylesInputs: SxProps<Theme> = {
 
 export const Login = () => {
   const [formData, setFormData] = useState({
+    nombre: "",
     email: "dexiblue.desing@gmail.com",
     password: "",
   });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //const formData = new FormData(e.currentTarget);
-    alert("test")
-    
+    alert("test");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {value, name} = e.target;
+    const { value, name } = e.target;
     setFormData({
       ...formData,
-      [name] : value,
-      
+      [name]: value,
     });
-    
-  }
-  
+  };
+
   return (
     <Stack
       bgcolor="#3a4348"
@@ -90,35 +88,46 @@ export const Login = () => {
         component="form"
         onSubmit={handleSubmit}
       >
-        
-        <Box component ="img" src={Logo} alt="Logo" />
+        <Box component="img" src={Logo} alt="Logo" />
         <Typography
           component="h3"
           variant="h1"
           color="#fff"
           fontWeight={700}
           textAlign={"center"}
-         
         >
           Movie
         </Typography>
+        <TextField
+          label="Nombre"
+          variant="outlined"
+          type="nombre"
+          sx={stylesInputs}
+          name="nombre"
+          value={formData.nombre}
+          onChange={handleChange}
+          fullWidth
+        />
+
         <TextField
           label="Email"
           variant="outlined"
           type="email"
           sx={stylesInputs}
-           name="email"
-           value={formData.email}
-           onChange={handleChange}      />
-        
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          fullWidth
+        />
+
         <TextField
           label="Password"
           variant="outlined"
           type="Password"
           sx={stylesInputs}
-           name="password"
-           value={formData.password}
-           onChange={handleChange}
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
         />
 
         <Button variant="contained" type="submit">
