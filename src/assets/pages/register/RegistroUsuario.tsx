@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 import type { Theme, SxProps } from "@mui/material";
-import axios from "axios";
 import { Box } from "@mui/system";
 import Logo from "../../../assets/Logo.png";
 // import { getTheme } from "../../theme"; // Importa el tema de tu aplicación
@@ -37,31 +36,50 @@ const stylesInputs: SxProps<Theme> = {
 };
 
 interface FormData {
-  nombre: string;
+  name: string;
+  lastname: string;
+  document: string;
   email: string;
   password: string;
+  confirmPassword: string;
+  confirmemail?: string;
 }
 
-const Register: React.FC = () => {
+const RegistroUsuario: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
-    nombre: "",
-    email: "",
+    name: "",
+    lastname: "",
+    document: "",
+    email: "dexiblue.desing@gmail.com",
+    confirmemail: "",
     password: "",
+    confirmPassword: "",
   });
+  const [error, setError] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await axios.post("http:http://localhost:5173/api/register", formData);
-      alert("Usuario registrado correctamente");
-    } catch (error) {
-      alert("Error al registrar usuario");
-      console.error(error);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    const newData = {
+      ...formData,
+      [name]: value,
+    };
+    if (
+      name === "confirmPassword" &&
+      formData.password !== formData.confirmPassword
+    ) {
+      setError("Passwords do not match");
+    } else {
+      setError("");
     }
+    setFormData(newData);
   };
 
   return (
@@ -74,63 +92,112 @@ const Register: React.FC = () => {
       justifyContent={"center"}
       alignItems={"center"}
     >
-    <Stack
-      bgcolor="#0D253F"
-      maxHeight="50%"
-      gap={2}
-      p={5}
-      borderRadius={"16px"}
-      component="form"
-      onSubmit={handleSubmit}
-    >
-      <Box component="img" src={Logo} alt="Logo" /> 
-      <Typography
-        component="h3"
-        variant="h5"
-        color="#fff"
-        fontWeight={700}
-        textAlign={"center"}
-        gutterBottom
+      <Stack
+        bgcolor="#0D253F"
+        gap={2}
+        p={5}
+        borderRadius={"16px"}
+        component="form"
+        onSubmit={handleSubmit}
       >
-        Registro de Usuario
-      </Typography>
-      <Stack spacing={2}>
-        <TextField
-          label="Nombre"
-          name="nombre"
-          value={formData.nombre}
-          onChange={handleChange}
-          required
-          fullWidth
-          sx={stylesInputs}
-        />
-        <TextField
-          label="Correo electrónico"
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          fullWidth
-          sx={stylesInputs}
-        />
-        <TextField
-          label="Contraseña"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          fullWidth
-          sx={stylesInputs}
-        />
-        <Button type="submit" variant="contained" color="primary">
-          Registrarse
-        </Button>
+        <Box component="img" src={Logo} alt="Logo" minWidth={200} mb={2} />
+
+        <Stack direction="row" gap={2}>
+          <Typography
+            component="h1"
+            variant="h3"
+            color="#fff"
+            fontWeight={700}
+            textAlign={"center"}
+            gutterBottom
+          >
+            Registro de Usuario
+          </Typography>
+        </Stack>
+        <Stack spacing={2} mt={2}>
+          {error && (
+            <Typography color="error" textAlign="center">
+              {error}
+            </Typography>
+          )}
+          <Stack direction="row" gap={2}>
+            <TextField
+              label="Name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              fullWidth
+              sx={stylesInputs}
+              autoComplete="off"
+            />
+
+            <TextField
+              label="LastName"
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleChange}
+              required
+              fullWidth
+              sx={stylesInputs}
+              autoComplete="off"
+            />
+          </Stack>
+          <Stack direction="row" gap={2}>
+            <TextField
+              label="Document"
+              name="document"
+              value={formData.document}
+              onChange={handleChange}
+              required
+              fullWidth
+              sx={stylesInputs}
+              autoComplete="off"
+            />
+            <TextField
+              label="Email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              fullWidth
+              sx={stylesInputs}
+              autoComplete="off"
+            />
+          </Stack>
+          <Stack direction="row" gap={2}>
+            <TextField
+              label="Password"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              fullWidth
+              sx={stylesInputs}
+              autoComplete="off"
+            />
+            <TextField
+              label="ConfirmPassword"
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+              fullWidth
+              sx={stylesInputs}
+              autoComplete="off"
+            />
+          </Stack>
+          {error.length > 0 && <Typography color="error">{error}</Typography>}
+          <Button variant="contained" type="submit">
+            Register
+          </Button>
+        </Stack>
       </Stack>
-    </Stack>
     </Stack>
   );
 };
 
-export default Register;
+export default RegistroUsuario;
