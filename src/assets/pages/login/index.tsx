@@ -84,7 +84,7 @@ export const Login = () => {
         maxHeight="50%"
         gap={2}
         p={5}
-        borderRadius={"16px"}
+        borderRadius={"14px"}
         component="form"
         onSubmit={handleSubmit}
       >
