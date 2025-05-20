@@ -96,7 +96,7 @@ export const Login = () => {
           fontWeight={700}
           textAlign={"center"}
         >
-          Movie
+          Veterinaria
         </Typography>
         <TextField
           label="Nombre"
