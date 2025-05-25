@@ -1,3 +1,11 @@
 export const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return (
+    <div
+      style={{
+        fontSize: "2rem",
+        color: "#fff",
+      }}
+    ></div>
+  );
 };
+

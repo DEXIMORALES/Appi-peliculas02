@@ -5,10 +5,12 @@ import {
   TextField,
   Button,
   Box,
-  MenuItem
+  MenuItem,
+  Alert,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import axios from 'axios';
 
 // Simulación de mascotas disponibles
 const mascotasDummy = [
@@ -24,6 +26,8 @@ export default function BookAppointment() {
     motivo: ''
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -31,18 +35,41 @@ export default function BookAppointment() {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const isFechaInvalida = (fecha) => {
+    const hoy = new Date();
+    const inputDate = new Date(fecha);
+    hoy.setHours(0, 0, 0, 0); // Eliminar hora para comparación justa
+    return inputDate < hoy;
+  };
 
-    if (!form.mascotaId || !form.fecha || !form.hora || !form.motivo) {
-      alert('Por favor completa todos los campos');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    const { mascotaId, fecha, hora, motivo } = form;
+
+    if (!mascotaId || !fecha || !hora || !motivo) {
+      setError('Por favor completa todos los campos.');
       return;
     }
 
-    // Aquí iría el llamado al backend
-    console.log('Cita registrada:', form);
-    alert('Cita registrada exitosamente');
-    navigate('/dashboard-owner');
+    if (isFechaInvalida(fecha)) {
+      setError('La fecha no puede estar en el pasado.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Reemplaza esta URL con tu endpoint real
+      const response = await axios.post('https://tu-api.com/citas', form);
+      alert('Cita registrada exitosamente');
+      navigate('/dashboard-owner');
+    } catch (err) {
+      console.error(err);
+      setError('Ocurrió un error al registrar la cita. Intenta nuevamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,6 +77,9 @@ export default function BookAppointment() {
       <Navbar userRole="owner" />
       <Container maxWidth="sm" sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>Apartar Cita</Typography>
+
+        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
         <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <TextField
             label="Mascota"
@@ -98,7 +128,9 @@ export default function BookAppointment() {
             fullWidth
           />
 
-          <Button type="submit" variant="contained">Apartar Cita</Button>
+          <Button type="submit" variant="contained" disabled={loading}>
+            {loading ? 'Enviando...' : 'Apartar Cita'}
+          </Button>
         </Box>
       </Container>
     </>

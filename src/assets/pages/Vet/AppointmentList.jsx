@@ -10,7 +10,7 @@ import {
   Paper,
   Button
 } from '@mui/material';
-import Navbar from '../components/Navbar';
+import Navbar from '@/components/Navbar';
 
 // Datos simulados
 const citasDummy = [
