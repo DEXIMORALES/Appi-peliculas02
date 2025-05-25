@@ -1,8 +1,9 @@
 import type { Theme } from "@emotion/react";
-import { Typography, Stack, TextField, Button } from "@mui/material";
+import { Typography, Stack, TextField, Button, Link } from "@mui/material";
 import { Box, type SxProps } from "@mui/system";
 import Logo from "../../../assets/Logo.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 /**Typography
  * pH1 H1 H2 H3 H4 H5 H6
@@ -55,10 +56,11 @@ export const Login = () => {
     email: "dexiblue.desing@gmail.com",
     password: "",
   });
+  const navigate = useNavigate();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //const formData = new FormData(e.currentTarget);
-    alert("test");
+    navigate("/Dashboard");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,10 +70,15 @@ export const Login = () => {
       [name]: value,
     });
   };
-
+  useEffect(() => {
+    const userJson = localStorage.getItem("user");
+    if (userJson !== null) {
+      navigate("/Dashboard");
+    }
+  }, []);
   return (
     <Stack
-      bgcolor="#3a4348"
+      bgcolor="#0f55b8"
       height="100vh"
       direction="row"
       component="main"
@@ -80,15 +87,20 @@ export const Login = () => {
       alignItems={"center"}
     >
       <Stack
-        bgcolor="#0D253F"
-        maxHeight="50%"
+        bgcolor="#5dd2f0"
+        maxHeight="70%"
         gap={2}
         p={5}
         borderRadius={"14px"}
         component="form"
         onSubmit={handleSubmit}
       >
-        <Box component="img" src={Logo} alt="Logo" />
+        <Box
+          component="img"
+          src={Logo}
+          alt="Logo"
+          style={{ width: "100px", height: "auto" }}
+        />
         <Typography
           component="h3"
           variant="h1"
@@ -129,7 +141,9 @@ export const Login = () => {
           value={formData.password}
           onChange={handleChange}
         />
-
+        <Link component={RouterLink} to="/register" color="#fff">
+          Registro
+        </Link>
         <Button variant="contained" type="submit">
           Sing In
         </Button>
@@ -137,5 +151,3 @@ export const Login = () => {
     </Stack>
   );
 };
-
-
