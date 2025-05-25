@@ -7,29 +7,29 @@ import {
   Box
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../assets/images/Logo.png'; // Ajusta según tu estructura
+import Logo from '../assets/Logo.png'; // Ajusta según tu estructura
 
-interface Props {
-  userRole: 'owner' | 'admin' | 'client'; // o los roles que uses
+interface NavbarProps {
+  userRole: "owner" | "vet"; // o los roles que uses
 }
 
-const Navbar: React.FC<Props> = ({ userRole }) => {
+const Navbar: React.FC<NavbarProps> = ({ userRole }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     // Aquí puedes limpiar auth, tokens, etc.
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
     <AppBar position="static">
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box
             component="img"
             src={Logo}
             alt="Logo"
-            sx={{ width: 40, height: 'auto', mr: 2 }}
+            sx={{ width: 40, height: "auto", mr: 2 }}
           />
           <Typography variant="h6" noWrap>
             Veterinaria | Rol: {userRole}

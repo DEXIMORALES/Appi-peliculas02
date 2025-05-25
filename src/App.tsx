@@ -9,6 +9,8 @@ import { Layout } from "./components/Layout";
 import { NotFound } from "./assets/pages/404";
 import { Dashboard } from "./assets/pages";
 import type { FC, PropsWithChildren } from "react";
+import PetForm from "./assets/pages/PetForm";
+import PetHistory from "./assets/pages/PetHistory";
 // Update the import path below to the actual location of your Components component
 // Update the import path below to the actual location and filename of your Components component
 
@@ -21,6 +23,8 @@ const App = () => {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/pet-form" element={<PetForm />} />
+        <Route path="/pet-history" element={<PetHistory />} />
         <Route
           path="/dashboard"
           element={

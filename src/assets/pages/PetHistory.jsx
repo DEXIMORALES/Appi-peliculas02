@@ -10,7 +10,7 @@ import {
   Divider,
   Box,
 } from "@mui/material";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 
 // Datos simulados
 const mascotasDummy = [

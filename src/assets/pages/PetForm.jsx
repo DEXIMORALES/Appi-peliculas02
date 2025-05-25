@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Typography,
   TextField,
   Button,
   Box,
-  MenuItem
+  MenuItem,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 
-export default function PetForm() {
+const PetForm = () => {
   const [form, setForm] = useState({
     nombre: '',
     especie: '',
@@ -28,13 +28,11 @@ export default function PetForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validación simple
     if (!form.nombre || !form.especie || !form.raza || !form.edad) {
       alert('Por favor completa todos los campos');
       return;
     }
 
-    // Aquí se guardaría en backend o en estado global
     console.log('Mascota registrada:', form);
     alert('Mascota registrada exitosamente');
     navigate('/dashboard-owner');
@@ -90,4 +88,7 @@ export default function PetForm() {
       </Container>
     </>
   );
-}
+};
+
+export default PetForm;
+
