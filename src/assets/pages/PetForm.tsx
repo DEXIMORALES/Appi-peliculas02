@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Container,
   Typography,
@@ -6,36 +6,60 @@ import {
   Button,
   Box,
   MenuItem,
+  Alert,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import axios from 'axios';
 
-const PetForm = () => {
-  const [form, setForm] = useState({
+interface FormData {
+  nombre: string;
+  especie: string;
+  raza: string;
+  edad: string;
+}
+
+export default function PetForm() {
+  const [form, setForm] = useState<FormData>({
     nombre: '',
     especie: '',
     raza: '',
     edad: '',
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
 
     if (!form.nombre || !form.especie || !form.raza || !form.edad) {
-      alert('Por favor completa todos los campos');
+      setError('Por favor completa todos los campos');
       return;
     }
 
-    console.log('Mascota registrada:', form);
-    alert('Mascota registrada exitosamente');
-    navigate('/dashboard-owner');
+    try {
+      setLoading(true);
+      await axios.post('http://localhost:3000/api/pets', form);
+      alert('Mascota registrada exitosamente');
+      navigate('/dashboard-owner');
+    } catch (err: unknown) {
+      let errorMessage = 'Error al registrar mascota';
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      }
+      console.error(err);
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -43,7 +67,18 @@ const PetForm = () => {
       <Navbar userRole="owner" />
       <Container maxWidth="sm" sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>Registrar Mascota</Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+        >
           <TextField
             label="Nombre"
             name="nombre"
@@ -83,12 +118,12 @@ const PetForm = () => {
             fullWidth
             inputProps={{ min: 0 }}
           />
-          <Button type="submit" variant="contained">Registrar Mascota</Button>
+          <Button type="submit" variant="contained" disabled={loading}>
+            {loading ? 'Registrando...' : 'Registrar Mascota'}
+          </Button>
         </Box>
       </Container>
     </>
   );
-};
-
-export default PetForm;
+}
 

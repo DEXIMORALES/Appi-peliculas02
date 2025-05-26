@@ -18,7 +18,13 @@ const mascotasDummy = [
   { id: 2, nombre: "Michi" },
 ];
 
-const historialDummy = {
+type Atencion = {
+  fecha: string;
+  diagnostico: string;
+  tratamiento: string;
+};
+
+const historialDummy: { [key: string]: Atencion[] } = {
   1: [
     {
       fecha: "2025-04-10",
