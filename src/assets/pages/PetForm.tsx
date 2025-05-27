@@ -66,7 +66,9 @@ export default function PetForm() {
     <>
       <Navbar userRole="owner" />
       <Container maxWidth="sm" sx={{ mt: 4 }}>
-        <Typography variant="h4" gutterBottom>Registrar Mascota</Typography>
+        <Typography variant="h4" gutterBottom>
+          Registrar Mascota
+        </Typography>
 
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
@@ -74,10 +76,15 @@ export default function PetForm() {
           </Alert>
         )}
 
+        <Navbar userRole="vet" />
+        <Typography variant="body1" sx={{ mb: 2 }}>
+          Completa el siguiente formulario para registrar una nueva mascota.
+        </Typography>
+
         <Box
           component="form"
           onSubmit={handleSubmit}
-          sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
           <TextField
             label="Nombre"
@@ -119,7 +126,7 @@ export default function PetForm() {
             inputProps={{ min: 0 }}
           />
           <Button type="submit" variant="contained" disabled={loading}>
-            {loading ? 'Registrando...' : 'Registrar Mascota'}
+            {loading ? "Registrando..." : "Registrar Mascota"}
           </Button>
         </Box>
       </Container>

@@ -82,7 +82,7 @@ export const Register = () => {
     if (userJson !== null) {
       navigate("/Dashboard");
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <Stack

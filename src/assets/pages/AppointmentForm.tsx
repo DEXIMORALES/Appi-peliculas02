@@ -5,68 +5,77 @@ import {
   TextField,
   Button,
   Box,
-  MenuItem,
-  Alert,
+  MenuItem
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 import axios from 'axios';
+import Navbar from '../../components/Navbar';
 
-// Simulación de mascotas disponibles
 const mascotasDummy = [
   { id: 1, nombre: 'Firulais' },
   { id: 2, nombre: 'Michi' }
 ];
 
-export default function BookAppointment() {
+export default function AppointmentForm() {
   const [form, setForm] = useState({
     mascotaId: '',
     fecha: '',
     hora: '',
     motivo: ''
   });
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const isFechaInvalida = (fecha) => {
-    const hoy = new Date();
-    const inputDate = new Date(fecha);
-    hoy.setHours(0, 0, 0, 0); // Eliminar hora para comparación justa
-    return inputDate < hoy;
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!form.mascotaId || !form.fecha || !form.hora || !form.motivo) {
+      setError('Por favor completa todos los campos');
+      return;
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    if (form.fecha < today) {
+      setError('La fecha no puede estar en el pasado');
+      return;
+    }
+
     setError('');
-
-    const { mascotaId, fecha, hora, motivo } = form;
-
-    if (!mascotaId || !fecha || !hora || !motivo) {
-      setError('Por favor completa todos los campos.');
-      return;
-    }
-
-    if (isFechaInvalida(fecha)) {
-      setError('La fecha no puede estar en el pasado.');
-      return;
-    }
-
     setLoading(true);
+
     try {
-      // Reemplaza esta URL con tu endpoint real
-      const response = await axios.post('https://tu-api.com/citas', form);
+      await axios.post('http://localhost:3000/api/appointments', form);
       alert('Cita registrada exitosamente');
       navigate('/dashboard-owner');
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
-      setError('Ocurrió un error al registrar la cita. Intenta nuevamente.');
+      // Define a type for the error
+      type AxiosErrorResponse = {
+        response?: {
+          data?: {
+            message?: string;
+          };
+        };
+      };
+      const errorObj = err as AxiosErrorResponse;
+      if (
+        typeof err === 'object' &&
+        err !== null &&
+        errorObj.response &&
+        errorObj.response.data &&
+        typeof errorObj.response.data === 'object' &&
+        errorObj.response.data.message
+      ) {
+        setError(errorObj.response.data.message || 'Error al registrar la cita');
+      } else {
+        setError('Error al registrar la cita');
+      }
     } finally {
       setLoading(false);
     }
@@ -77,10 +86,9 @@ export default function BookAppointment() {
       <Navbar userRole="owner" />
       <Container maxWidth="sm" sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>Apartar Cita</Typography>
-
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-
         <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {error && <Typography color="error">{error}</Typography>}
+
           <TextField
             label="Mascota"
             name="mascotaId"
@@ -129,7 +137,7 @@ export default function BookAppointment() {
           />
 
           <Button type="submit" variant="contained" disabled={loading}>
-            {loading ? 'Enviando...' : 'Apartar Cita'}
+            {loading ? 'Guardando...' : 'Apartar Cita'}
           </Button>
         </Box>
       </Container>

@@ -10,7 +10,7 @@ import {
   Paper,
   Button
 } from '@mui/material';
-import Navbar from '@/components/Navbar';
+import Navbar from '../../../components/Navbar'; // Ajusta si la ruta es diferente
 
 // Datos simulados
 const citasDummy = [
@@ -33,7 +33,8 @@ const citasDummy = [
 ];
 
 export default function AppointmentList() {
-  const handleAtendida = (id) => {
+
+  const handleAtendida = (id: number): void => {
     alert(`Marcaste como atendida la cita ID: ${id}`);
     // Aquí iría la lógica para actualizar estado en backend
   };

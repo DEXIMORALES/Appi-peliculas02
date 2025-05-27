@@ -3,7 +3,8 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { Login } from "./assets/pages/login/index";
 import { Register } from "./assets/pages/register/index";
 
-import { Layout } from "./components/Layout";
+
+//import { Layout } from "./components/Layout";
 //import { FC, PropsWithChildren } from "react";
 
 import { NotFound } from "./assets/pages/404";
@@ -11,6 +12,10 @@ import { Dashboard } from "./assets/pages";
 import type { FC, PropsWithChildren } from "react";
 import PetForm from "./assets/pages/PetForm";
 import PetHistory from "./assets/pages/PetHistory";
+import BookAppointment from './assets/pages/BookAppointment';
+import DashboardVet from "./assets/pages/DashboardVet/DashboardVet";
+ // Update this path if the filename or extension is different, e.g., './assets/pages/DashboardVet.tsx' or './assets/pages/dashboardVet'
+
 // Update the import path below to the actual location of your Components component
 // Update the import path below to the actual location and filename of your Components component
 
@@ -25,6 +30,8 @@ const App = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/pet-form" element={<PetForm />} />
       <Route path="/pet-history" element={<PetHistory />} />
+       <Route path="/book-appointment" element={<BookAppointment />} />
+       <Route path="/dashboard-vet" element={<DashboardVet />} />
       <Route
         path="/dashboard"
         element={
