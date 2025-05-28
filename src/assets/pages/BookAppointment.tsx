@@ -68,9 +68,13 @@ export default function BookAppointment() {
 
       alert('Cita registrada exitosamente');
       navigate('/dashboard-owner');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err?.response?.data?.message || 'Error al registrar la cita');
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || "Error al registrar la cita");
+      } else {
+        setError("Error al registrar la cita");
+      }
     } finally {
       setLoading(false);
     }

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import Navbar from "../../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import Logo from "../register/Logo.png";
+import Logo from "../Vet/Logo.png";
 
 const DashboardVet: React.FC = () => {
   const navigate = useNavigate();
