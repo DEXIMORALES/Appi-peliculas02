@@ -1,32 +1,11 @@
-import type { Theme } from "@emotion/react";
 import { Typography, Stack, TextField, Button, Link } from "@mui/material";
-import { Box, type SxProps } from "@mui/system";
-import Logo from "../../../assets/Logo.png";
+import { Box } from "@mui/system";
+import Logo from "../../../assets/images/Logo.png";
 import { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-/**Typography
- * pH1 H1 H2 H3 H4 H5 H6
- */
-/** Stack
- * div que tiene por defecto display flex
- * direction: row | column
- * gap: espacio entre los elementos
- * bgcolor: color de fondo
- * height: altura del stack
- * width: ancho del stack
- * spacing: espacio entre los elementos
- * padding: espacio dentro del stack
- * margin: espacio fuera del stack
- * alignItems: alinear los elementos dentro del stack
- * justifyContent: justificar los elementos dentro del stack
- * flexDirection: dirección del stack
- * flexWrap: envolver los elementos dentro del stack
- * flexGrow: crecer el stack
- * #0D253F
- * como componentes
- */
-const stylesInputs: SxProps<Theme> = {
+const stylesInputs = {
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
       borderColor: "#fff",
@@ -56,11 +35,31 @@ export const Login = () => {
     email: "dexiblue.desing@gmail.com",
     password: "",
   });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //const formData = new FormData(e.currentTarget);
-    navigate("/Dashboard");
+    try {
+      const res = await axios.post("http://localhost:3000/api/auth/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      const user = res.data;
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // Redirigir según tipo de usuario
+      if (user.role === "owner") {
+        navigate("/DashboardOwner");
+      } else if (user.role === "vet") {
+        navigate("/DashboardVet");
+      } else {
+        navigate("/dashboard"); // fallback
+      }
+    } catch {
+      setError("Credenciales incorrectas o error de servidor");
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,12 +69,14 @@ export const Login = () => {
       [name]: value,
     });
   };
+
   useEffect(() => {
     const userJson = localStorage.getItem("user");
     if (userJson !== null) {
-      navigate("/Dashboard");
+      navigate("/dashboard");
     }
-  }, []);
+  }, [navigate]);
+
   return (
     <Stack
       bgcolor="#0f55b8"
@@ -110,10 +111,17 @@ export const Login = () => {
         >
           Veterinaria
         </Typography>
+
+        {error && (
+          <Typography color="error" textAlign="center">
+            {error}
+          </Typography>
+        )}
+
         <TextField
           label="Nombre"
           variant="outlined"
-          type="nombre"
+          type="text"
           sx={stylesInputs}
           name="nombre"
           value={formData.nombre}
@@ -135,17 +143,19 @@ export const Login = () => {
         <TextField
           label="Password"
           variant="outlined"
-          type="Password"
+          type="password"
           sx={stylesInputs}
           name="password"
           value={formData.password}
           onChange={handleChange}
         />
+
         <Link component={RouterLink} to="/register" color="#fff">
           Registro
         </Link>
+
         <Button variant="contained" type="submit">
-          Sing In
+          Sign In
         </Button>
       </Stack>
     </Stack>

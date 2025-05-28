@@ -16,7 +16,7 @@ export default function Navbar({ userRole }: Props) {
         <Box sx={{ display: "flex", gap: 2 }}>
           {userRole === "owner" && (
             <>
-              <Button color="inherit" component={Link} to="/dashboard">
+              <Button color="inherit" component={Link} to="/dashboard-vet">
                 Inicio
               </Button>
               <Button color="inherit" component={Link} to="/pet-form">
@@ -30,7 +30,7 @@ export default function Navbar({ userRole }: Props) {
 
           {userRole === "vet" && (
             <>
-              <Button color="inherit" component={Link} to="/dashboard">
+              <Button color="inherit" component={Link} to="/dashboard-vet">
                 Inicio
               </Button>
               <Button color="inherit" component={Link} to="/pet-history">

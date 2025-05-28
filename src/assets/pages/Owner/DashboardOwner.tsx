@@ -10,7 +10,9 @@ import {
 
 import Navbar from '../../../components/Navbar'; // Ajusta si la ruta es diferente
 import { useNavigate } from 'react-router-dom';
-import Logo from '../register/Logo.png';
+import Logo from "../../../assets/images/Logo.png";
+
+
 
 const DashboardOwner: React.FC = () => {
   const navigate = useNavigate();

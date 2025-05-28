@@ -1,8 +1,7 @@
 import { Typography, Stack, TextField, Button, Box, Link } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import type { SxProps, Theme } from "@mui/material";
-
-import Logo from "../../../assets/Logo.png";
+import Logo from "../../../assets/images/Logo.png"; 
 import { useState, useEffect } from "react";
 // import { getTheme } from "../../theme"; // Importa el tema de tu aplicación
 
